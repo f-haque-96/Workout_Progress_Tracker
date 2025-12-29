@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(dir:*)",
+      "Bash(powershell -Command \"\\(Get-Content src/HeavyDutyTracker.tsx | Measure-Object -Line\\).Lines\")",
+      "Bash(git add:*)",
+      "Bash(test:*)"
+    ]
+  }
+}

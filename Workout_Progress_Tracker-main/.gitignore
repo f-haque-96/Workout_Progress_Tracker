@@ -1,0 +1,51 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+dist
+dist-ssr
+*.local
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# IMPORTANT: Backend Python environment and secrets
+backend/venv/
+backend/__pycache__/
+backend/.env
+.env
+
+# IMPORTANT: User health data (never commit personal data!)
+backend/data/
+backend/data/cache.json
+backend/data/apple_health_export.xml
+*.xml
+!example*.xml
+
+# Package manager lock files
+package-lock.json
+yarn.lock
+
+# Environment variables / secrets
+.env
+.env.*
+!.env.sample
+
+# Vite / tooling
+.vite/
+.cache/
+coverage/

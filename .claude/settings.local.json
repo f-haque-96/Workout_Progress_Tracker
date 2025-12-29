@@ -9,7 +9,10 @@
       "Bash(git push:*)",
       "WebFetch(domain:github.com)",
       "WebFetch(domain:raw.githubusercontent.com)",
-      "Bash(git ls-tree:*)"
+      "Bash(git ls-tree:*)",
+      "WebFetch(domain:api.github.com)",
+      "Bash(git hash-object:*)",
+      "Bash(awk:*)"
     ]
   }
 }

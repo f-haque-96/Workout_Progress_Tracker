@@ -1263,9 +1263,9 @@ export default function HeavyDutyTracker() {
 
   // ---------- Main UI ----------
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-blue-950 to-slate-950 text-white p-4"> 
+    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-blue-950 to-slate-950 text-white p-4">
       {/* === Upload Status Banner (Step 7) === */}
-            {uploadStatus.type && (
+      {uploadStatus.type && (
         <div className={`fixed top-4 right-4 z-50 rounded-lg p-4 shadow-lg max-w-md ${
           uploadStatus.type === 'success' ? 'bg-green-600' :
           uploadStatus.type === 'error' ? 'bg-red-600' : 'bg-blue-600'
@@ -1274,7 +1274,7 @@ export default function HeavyDutyTracker() {
             {uploadStatus.type === 'success' && <CheckCircle2 className="w-5 h-5" />}
             {uploadStatus.type === 'error' && <AlertCircle className="w-5 h-5" />}
             <p className="text-white font-medium">{uploadStatus.message}</p>
-            <button 
+            <button
               onClick={() => setUploadStatus({ type: null, message: '' })}
               className="text-white/80 hover:text-white"
             >

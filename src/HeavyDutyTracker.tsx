@@ -2358,6 +2358,11 @@ export default function HeavyDutyTracker() {
               )}
             </div>
           )}
+          </div>
+          </div>
+          </div>
+          </div>
+          </div>
         </div>
 
         {/* Workout Table */}

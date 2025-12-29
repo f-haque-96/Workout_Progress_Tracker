@@ -848,6 +848,104 @@ export default function HeavyDutyTracker() {
     }
   }, []);
 
+  // ✅ NEW: Fetch data from API on mount and when dataVersion changes
+  useEffect(() => {
+    if (!hydrated) return;
+
+    const fetchFromAPI = async () => {
+      try {
+        const response = await fetch('/api/workouts');
+        if (!response.ok) return;
+
+        const data = await response.json();
+        if (!data.workouts) return;
+
+        // Transform API data into the format the component expects
+        const transformedWorkouts: WorkoutsState = {
+          push: [],
+          pull: [],
+          legs: [],
+          conditioning: [],
+        };
+
+        // Process each workout from the API
+        for (const workout of data.workouts) {
+          for (const exercise of workout.exercises || []) {
+            // Find the working set (highest weight or last normal set)
+            const workingSets = exercise.sets?.filter((s: any) => s.type === 'normal') || [];
+            if (workingSets.length === 0) continue;
+
+            // Get the best working set (highest weight, or last set if tied)
+            const bestSet = workingSets.reduce((best: any, curr: any) => {
+              if (curr.weight_kg > best.weight_kg) return curr;
+              if (curr.weight_kg === best.weight_kg && curr.reps > best.reps) return curr;
+              return best;
+            });
+
+            // Normalize exercise name for key lifts
+            const normalizedName = normalizeExercise(exercise.title || '');
+
+            // Create workout entry
+            const entry: WorkoutEntry = {
+              date: workout.start_time?.split('T')[0] || workout.created_at?.split('T')[0] || '',
+              exercise: normalizedName,
+              exerciseRaw: exercise.title || '',
+              sets: workingSets.length,
+              reps: bestSet.reps || 0,
+              weight: bestSet.weight_kg || 0,
+              rpe: bestSet.rpe || 0,
+              lowTarget: 0,
+              highTarget: 0,
+              tempo: '',
+              rest: '',
+              notes: exercise.notes || '',
+            };
+
+            // Categorize by muscle group
+            const muscleGroup = inferMuscleGroupForEntry(normalizedName);
+            if (muscleGroup === 'Chest' || muscleGroup === 'Shoulders') {
+              transformedWorkouts.push.push(entry);
+            } else if (muscleGroup === 'Back') {
+              transformedWorkouts.pull.push(entry);
+            } else if (muscleGroup === 'Legs') {
+              transformedWorkouts.legs.push(entry);
+            } else if (muscleGroup === 'Conditioning') {
+              transformedWorkouts.conditioning.push(entry);
+            }
+          }
+        }
+
+        // Update state with fetched data
+        setWorkouts(transformedWorkouts);
+        setUploadStatus({
+          type: 'success',
+          message: `Loaded ${data.workouts.length} workouts from Hevy`,
+          count: data.workouts.length
+        });
+        setTimeout(() => setUploadStatus({ type: null, message: '', count: 0 }), 3000);
+
+      } catch (error) {
+        console.error('Failed to fetch from API:', error);
+      }
+    };
+
+    // Helper function to infer muscle group for categorization
+    function inferMuscleGroupForEntry(exercise: string): MuscleGroup {
+      const x = exercise.toLowerCase();
+      if (/(squat|lunge|leg press|hack|deadlift|rdl|thigh|hamstring|quad|leg curl)/.test(x)) return "Legs";
+      if (/(bench|chest|fly|dip|press.*chest)/.test(x)) return "Chest";
+      if (/(row|pulldown|pull-up|chin|lat|back)/.test(x)) return "Back";
+      if (/(press|shoulder|lateral|rear delt|overhead)/.test(x) && !/(leg|bench|chest)/.test(x)) return "Shoulders";
+      if (/(curl|bicep|tricep|extension|pushdown)/.test(x)) return "Arms";
+      if (/(calf)/.test(x)) return "Calves";
+      if (/(abs|core|crunch|plank)/.test(x)) return "Core";
+      if (/(run|bike|swim|walk|conditioning|kettlebell|cardio)/.test(x)) return "Conditioning";
+      return "Other";
+    }
+
+    fetchFromAPI();
+  }, [hydrated, dataVersion]);
+
   useEffect(() => {
     if (!hydrated) return;
     try {

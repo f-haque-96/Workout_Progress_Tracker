@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { fitnessAPI, WorkoutsResponse } from '../api/fitnessApi';
+import { fitnessAPI, type WorkoutsResponse } from '../api/fitnessApi';
 
 interface UseWorkoutDataOptions {
   days?: number;

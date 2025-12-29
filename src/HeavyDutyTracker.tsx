@@ -1383,20 +1383,20 @@ export default function HeavyDutyTracker() {
           </div>
         </div>
 
-      <button
-  onClick={() => {
-    setDataVersion(v => v + 1);
-    setUploadStatus({
-      type: 'info',
-      message: 'Dashboard refreshed'
-    });
-    setTimeout(() => setUploadStatus({ type: null, message: '' }), 2000);
-  }}
-  className="bg-white/20 hover:bg-white/30 px-4 py-2 rounded-lg transition-colors flex items-center gap-2"
->
-  <RefreshCw className="w-4 h-4" />
-  Refresh
-</button>
+        <button
+          onClick={() => {
+            setDataVersion(v => v + 1);
+            setUploadStatus({
+              type: 'info',
+              message: 'Dashboard refreshed'
+            });
+            setTimeout(() => setUploadStatus({ type: null, message: '' }), 2000);
+          }}
+          className="bg-white/20 hover:bg-white/30 px-4 py-2 rounded-lg transition-colors flex items-center gap-2"
+        >
+          <RefreshCw className="w-4 h-4" />
+          Refresh
+        </button>
 
         {/* Upload Panel */}
         {showUploadGuide && (

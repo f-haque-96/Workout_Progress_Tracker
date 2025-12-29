@@ -1307,6 +1307,7 @@ export default function HeavyDutyTracker() {
                 </p>
               </div>
             </div>
+            </div>
 
             <div className="relative">
               <button
